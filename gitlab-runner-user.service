@@ -1,0 +1,35 @@
+; Copyright 2019 Colin Samples
+;
+; SPDX-License-Identifier: Apache-2.0
+;
+
+[Unit]
+Description=GitLab Runner Service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+; Have `gitlab-runner` read the `config.toml` file from ~/.config/gitlab-runner.
+Environment="GITLAB_RUNNER_CFG_DIR=%E/gitlab-runner" \
+            "GITLAB_RUNNER_CONTAINER_NAME=gitlab-runner-container" \
+            "GITLAB_RUNNER_IMAGE_NAME=gitlab-runner-image" \
+            "LOG_FORMAT=text"
+; Override this or add other environment variables in
+; ~/.config/gitlab-runner.env
+EnvironmentFile=-%E/gitlab-runner.env
+
+ExecStartPre=-/usr/bin/podman rm -f ${GITLAB_RUNNER_CONTAINER_NAME}
+ExecStart=/usr/bin/podman run \
+            --volume ${GITLAB_RUNNER_CFG_DIR}:/etc/gitlab-runner:ro,Z \
+            --name ${GITLAB_RUNNER_CONTAINER_NAME} \
+            --rm ${GITLAB_RUNNER_IMAGE_NAME}
+
+; We need to send SIGTERM twice to get `gitlab-runner` to shutdown gracefully
+ExecStop=/usr/bin/podman kill --signal TERM ${GITLAB_RUNNER_CONTAINER_NAME}
+ExecStop=/usr/bin/podman stop ${GITLAB_RUNNER_CONTAINER_NAME}
+
+ExecReload=/usr/bin/podman kill --signal HUP ${GITLAB_RUNNER_CONTAINER_NAME}
+
+[Install]
+WantedBy=multi-user.target
+
