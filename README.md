@@ -17,7 +17,7 @@ This only supports the shell executor until
 
 ### Building the image
 ```
-podman pull quay.io/vddvss/gitlab-runner-user:latest
+podman pull vddvss/gitlab-runner-user:latest
 ```
 
 Or
