@@ -12,7 +12,7 @@ Wants=network-online.target
 ; Have `gitlab-runner` read the `config.toml` file from ~/.config/gitlab-runner.
 Environment="GITLAB_RUNNER_CFG_DIR=%E/gitlab-runner" \
             "GITLAB_RUNNER_CONTAINER_NAME=gitlab-runner-container" \
-            "GITLAB_RUNNER_IMAGE_NAME=gitlab-runner-image" \
+            "GITLAB_RUNNER_IMAGE_NAME=gitlab-runner-user" \
             "LOG_FORMAT=text"
 ; Override this or add other environment variables in
 ; ~/.config/gitlab-runner.env

@@ -13,7 +13,7 @@ register: verify-uid
 	mkdir -p $(cfg_dir)/gitlab-runner
 	podman run --rm -it \
 	    --volume $(cfg_dir)/gitlab-runner:/etc/gitlab-runner:ro,Z \
-	    gitlab-runner-image:latest \
+	    gitlab-runner-user:latest \
 	    /usr/bin/gitlab-runner register --tag-list shell
 
 .PHONY: install
@@ -24,7 +24,7 @@ install: verify-uid
 
 .PHONY: build-image
 build-image: verify-uid
-	buildah bud -t gitlab-runner-image $(CURDIR)
+	buildah bud -t gitlab-runner-user $(CURDIR)
 
 .PHONY: verify-uid
 verify-uid:
