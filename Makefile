@@ -12,9 +12,9 @@ data_home := $(shell systemd-path user-shared)
 register: verify-uid
 	mkdir -p $(cfg_dir)/gitlab-runner
 	podman run --rm -it \
-	    --volume $(cfg_dir)/gitlab-runner:/etc/gitlab-runner:ro,Z \
+	    --volume $(cfg_dir)/gitlab-runner:/etc/gitlab-runner:Z \
 	    gitlab-runner-user:latest \
-	    /usr/bin/gitlab-runner register --tag-list shell
+	    /usr/bin/gitlab-runner register --executor shell
 
 .PHONY: install
 install: verify-uid
